@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: test-dashboard
-          image: gitlab:5050/applications/test-dashboard:latest
+          image: gitlab-registry.gitlab-system.svc.cluster.local:5000/daitics-com/test-dashboard:latest
           ports:
             - containerPort: 80
               name: http
