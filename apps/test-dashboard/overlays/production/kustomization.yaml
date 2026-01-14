@@ -13,5 +13,5 @@ patches:
   - path: deployment-patch.yaml
 
 images:
-  - name: gitlab-registry.service.daitics.local:30080/daitics-com/test-dashboard
+  - name: gitlab-registry.service.daitics.local:30443/daitics-com/test-dashboard
     newTag: "latest"
