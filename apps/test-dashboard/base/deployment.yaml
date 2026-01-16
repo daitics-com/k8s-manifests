@@ -14,6 +14,8 @@ spec:
       labels:
         app: test-dashboard
     spec:
+      imagePullSecrets:
+        - name: gitlab-registry-credentials
       containers:
         - name: test-dashboard
           image: gitlab-registry.service.daitics.local:30443/daitics-com/test-dashboard:latest
