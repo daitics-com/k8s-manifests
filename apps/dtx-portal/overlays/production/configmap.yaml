@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dtx-portal-config
+data:
+  config.js: |
+    window.__RUNTIME_CONFIG__ = {
+      // Keycloak
+      AUTH_ENABLED: true,
+      KEYCLOAK_URL: "https://keycloak.service.daitics.local",
+      KEYCLOAK_REALM: "daitics-prod",
+      KEYCLOAK_CLIENT_ID: "dtx-unified-portal",
+
+      // Backend APIs — empty until each service is migrated to K8s
+      API_BASE_URL: "",
+      SCHEMA_REGISTRY_API_URL: "",
+      PIPELINE_API_URL: "",
+      OPERATOR_API_URL: "",
+      SYNTHETIC_DATA_API_URL: "",
+      EXPRESSIONS_API_URL: "",
+      KAFKA_API_URL: "",
+      CACHE_API_URL: "",
+      OBSERVABILITY_API_URL: "",
+      WORKFLOW_API_URL: "",
+
+      // App
+      APP_NAME: "Daitics Portal",
+      APP_VERSION: "1.0.0",
+      BRAND_NAME: "Daitics",
+
+      // Features
+      FEATURE_OBSERVABILITY: true,
+      FEATURE_WORKFLOWS: true,
+      FEATURE_SCHEMA_REGISTRY: true,
+      FEATURE_CONNECTORS: true,
+
+      // Monitoring
+      SENTRY_ENVIRONMENT: "production",
+      DEV_TOOLS_ENABLED: false,
+      DEBUG_MODE: false,
+    };

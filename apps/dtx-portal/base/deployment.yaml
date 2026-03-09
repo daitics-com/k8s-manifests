@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dtx-portal
+  labels:
+    app: dtx-portal
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0  # GitOps: Git is source of truth for rollbacks
+  selector:
+    matchLabels:
+      app: dtx-portal
+  template:
+    metadata:
+      labels:
+        app: dtx-portal
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry-credentials
+      containers:
+        - name: dtx-portal
+          image: gitlab-registry.service.daitics.local:30443/daitics-com/dtx-portal:latest
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: runtime-config
+              mountPath: /usr/share/nginx/html/config.js
+              subPath: config.js
+      volumes:
+        - name: runtime-config
+          configMap:
+            name: dtx-portal-config
