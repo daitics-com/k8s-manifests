@@ -7,7 +7,7 @@ data:
     window.__RUNTIME_CONFIG__ = {
       // Keycloak (already in K8s)
       AUTH_ENABLED: true,
-      KEYCLOAK_URL: "https://keycloak.service.daitics.local",
+      KEYCLOAK_URL: "https://keycloak.service.daitics.local/auth",
       KEYCLOAK_REALM: "daitics-dev",
       KEYCLOAK_CLIENT_ID: "dtx-unified-portal",
 
