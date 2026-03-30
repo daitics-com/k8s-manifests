@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: p5-operator-catalog
+  labels:
+    app: p5-operator-catalog
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0  # GitOps: Git is source of truth for rollbacks
+  selector:
+    matchLabels:
+      app: p5-operator-catalog
+  template:
+    metadata:
+      labels:
+        app: p5-operator-catalog
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry-credentials
+      containers:
+        - name: p5-operator-catalog
+          image: gitlab-registry.service.daitics.local:30443/daitics-com/p5-operator-catalog:latest
+          ports:
+            - containerPort: 50001
+              name: http
+          envFrom:
+            - configMapRef:
+                name: p5-operator-catalog-config
+            - secretRef:
+                name: backend-db-secrets
+            - secretRef:
+                name: backend-keycloak-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+          # Startup probe: gives JVM up to 130s to start (30s + 10 * 10s)
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 50001
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 10
+          # Liveness: restart pod if app becomes unresponsive
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 50001
+            periodSeconds: 30
+            failureThreshold: 3
+          # Readiness: stop sending traffic if app isn't ready
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 50001
+            periodSeconds: 10
+            failureThreshold: 3

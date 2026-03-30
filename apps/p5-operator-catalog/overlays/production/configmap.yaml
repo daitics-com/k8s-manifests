@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: p5-operator-catalog-config
+data:
+  # ========== Server ==========
+  SERVER_PORT: "50001"
+  SPRING_PROFILES_ACTIVE: "prod"
+
+  # ========== Database ==========
+  DB_HOST: "192.168.100.15"
+  DB_PORT: "5432"
+  DB_NAME: "daitics"
+  DB_USER: "daitics_app"
+
+  # ========== Keycloak — JWT Validation ==========
+  KEYCLOAK_ISSUER_URI: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080/realms/daitics-prod"
+  KEYCLOAK_JWK_SET_URI: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080/realms/daitics-prod/protocol/openid-connect/certs"
+
+  # ========== Keycloak — Admin API ==========
+  KEYCLOAK_SERVER_URL: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080"
+  KEYCLOAK_REALM: "daitics-prod"
+  KEYCLOAK_ADMIN_USERNAME: "admin"
+
+  # ========== OpenTelemetry ==========
+  OTEL_SERVICE_NAME: "p5-operator-catalog"
+  OTEL_TRACES_EXPORTER: "none"
+  OTEL_METRICS_EXPORTER: "none"
+  OTEL_LOGS_EXPORTER: "none"
+  OTEL_EXPORTER_OTLP_ENDPOINT: ""
+  OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
+
+  # ========== Swagger — Disabled in production ==========
+  SWAGGER_SERVER_URL: "https://p5-operator-catalog.service.daitics.local"
+  SWAGGER_SERVER_DESCRIPTION: "Production server"
