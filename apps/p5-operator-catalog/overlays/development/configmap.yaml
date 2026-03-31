@@ -14,12 +14,12 @@ data:
   DB_USER: "daitics_app"
   # DB_PASSWORD comes from backend-db-secrets (ExternalSecret → Vault)
 
-  # ========== Keycloak — JWT Validation (internal K8s DNS) ==========
-  KEYCLOAK_ISSUER_URI: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080/realms/daitics-dev"
-  KEYCLOAK_JWK_SET_URI: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080/realms/daitics-dev/protocol/openid-connect/certs"
+  # ========== Keycloak — JWT Validation (internal K8s DNS, /auth prefix required) ==========
+  KEYCLOAK_ISSUER_URI: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080/auth/realms/daitics-dev"
+  KEYCLOAK_JWK_SET_URI: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080/auth/realms/daitics-dev/protocol/openid-connect/certs"
 
-  # ========== Keycloak — Admin API (User Sync) ==========
-  KEYCLOAK_SERVER_URL: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080"
+  # ========== Keycloak — Admin API (User Sync, /auth prefix required) ==========
+  KEYCLOAK_SERVER_URL: "http://keycloak-keycloakx-http.keycloak.svc.cluster.local:8080/auth"
   KEYCLOAK_REALM: "daitics-dev"
   KEYCLOAK_ADMIN_USERNAME: "admin"
   # KEYCLOAK_ADMIN_PASSWORD comes from backend-keycloak-secrets (ExternalSecret → Vault)
