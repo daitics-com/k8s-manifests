@@ -37,14 +37,15 @@ spec:
             limits:
               memory: "1024Mi"
               cpu: "500m"
-          # Startup probe: gives JVM up to 130s to start (30s + 10 * 10s)
+          # Startup probe: gives JVM up to 260s to start (60s + 20 * 10s)
+          # Spring Boot + OTel agent + Hibernate + Flyway needs ~120s on first start
           startupProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 50001
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60
             periodSeconds: 10
-            failureThreshold: 10
+            failureThreshold: 20
           # Liveness: restart pod if app becomes unresponsive
           livenessProbe:
             httpGet:

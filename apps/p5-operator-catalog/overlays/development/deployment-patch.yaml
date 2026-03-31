@@ -10,8 +10,8 @@ spec:
         - name: p5-operator-catalog
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "200m"
-            limits:
               memory: "1024Mi"
               cpu: "500m"
+            limits:
+              memory: "2048Mi"
+              cpu: "1000m"
