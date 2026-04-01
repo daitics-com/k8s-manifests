@@ -38,6 +38,9 @@ data:
   OTEL_EXPORTER_OTLP_ENDPOINT: ""
   OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
 
+  # ========== Debug (temporary — remove after JWT issue resolved) ==========
+  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: "DEBUG"
+
   # ========== Swagger ==========
   SWAGGER_SERVER_URL: "https://dev-p5-operator-catalog.service.daitics.local"
   SWAGGER_SERVER_DESCRIPTION: "Development server (K8s)"
