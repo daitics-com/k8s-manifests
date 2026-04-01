@@ -14,13 +14,11 @@ data:
   DB_USER: "daitics_app"
   # DB_PASSWORD comes from backend-db-secrets (ExternalSecret → Vault)
 
-  # ========== Keycloak — JWT Validation ==========
-  # ISSUER_URI points to internal Keycloak for OIDC discovery.
-  # Keycloak's discovery response returns:
-  #   issuer = external URL (matches JWT iss claim) → Spring validates iss string match
-  #   jwks_uri = internal URL → Spring fetches keys internally (fast, no external routing)
-  # This works because Keycloak auto-detects internal vs external URLs in its response.
-  KEYCLOAK_ISSUER_URI: "http://keycloak-keycloakx-http.keycloak:8080/auth/realms/daitics-dev"
+  # ========== Keycloak — JWT Validation (Custom JwtDecoder) ==========
+  # ISSUER_URI = external URL (string comparison against JWT "iss" claim — NO HTTP call)
+  # JWK_SET_URI = internal URL (actual HTTP call to fetch signing keys)
+  # See: JwtDecoderConfig.java for the custom decoder that splits these two concerns
+  KEYCLOAK_ISSUER_URI: "https://keycloak.service.daitics.local/auth/realms/daitics-dev"
   KEYCLOAK_JWK_SET_URI: "http://keycloak-keycloakx-http.keycloak:8080/auth/realms/daitics-dev/protocol/openid-connect/certs"
 
   # ========== Keycloak — Admin API (User Sync, /auth prefix required) ==========
