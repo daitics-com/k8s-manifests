@@ -36,9 +36,6 @@ data:
   OTEL_EXPORTER_OTLP_ENDPOINT: ""
   OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
 
-  # ========== Debug (temporary — remove after JWT issue resolved) ==========
-  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: "DEBUG"
-
   # ========== Spring CORS (dtx-commons DtxSecurityProperties) ==========
   # Default only allows localhost and sandbox IPs. Must add K8s portal origin.
   DTX_SECURITY_CORS_ALLOWED_ORIGINS: "https://dev-dtx-portal.service.daitics.local,https://portal.service.daitics.local,http://localhost:[*]"
