@@ -17,7 +17,7 @@ data:
       API_BASE_URL: "",
       SCHEMA_REGISTRY_API_URL: "",
       PIPELINE_API_URL: "",
-      OPERATOR_API_URL: "",
+      OPERATOR_API_URL: "https://dev-p5-operator-catalog.service.daitics.local",
       SYNTHETIC_DATA_API_URL: "",
       EXPRESSIONS_API_URL: "",
       KAFKA_API_URL: "",
