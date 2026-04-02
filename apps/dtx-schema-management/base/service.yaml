@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dtx-schema-management
+  labels:
+    app: dtx-schema-management
+spec:
+  type: ClusterIP
+  selector:
+    app: dtx-schema-management
+  ports:
+    - port: 50031
+      targetPort: 50031
+      protocol: TCP
+      name: http

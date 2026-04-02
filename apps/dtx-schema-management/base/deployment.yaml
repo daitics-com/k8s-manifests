@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dtx-schema-management
+  labels:
+    app: dtx-schema-management
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0  # GitOps: Git is source of truth for rollbacks
+  selector:
+    matchLabels:
+      app: dtx-schema-management
+  template:
+    metadata:
+      labels:
+        app: dtx-schema-management
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry-credentials
+      containers:
+        - name: dtx-schema-management
+          image: gitlab-registry.service.daitics.local:30443/daitics-com/dtx-schema-management:latest
+          ports:
+            - containerPort: 50031
+              name: http
+          envFrom:
+            - configMapRef:
+                name: dtx-schema-management-config
+            - secretRef:
+                name: backend-db-secrets
+            - secretRef:
+                name: backend-keycloak-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+          # Startup probe: gives JVM up to 260s to start (60s + 20 * 10s)
+          # Spring Boot + OTel agent + Hibernate + Flyway needs ~120s on first start
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 50031
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 20
+          # Liveness: restart pod if app becomes unresponsive
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 50031
+            periodSeconds: 30
+            failureThreshold: 3
+          # Readiness: stop sending traffic if app isn't ready
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 50031
+            periodSeconds: 10
+            failureThreshold: 3

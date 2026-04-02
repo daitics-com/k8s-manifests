@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dtx-schema-management-config
+data:
+  # ========== Server ==========
+  SERVER_PORT: "50031"
+  SPRING_PROFILES_ACTIVE: "dev"
+
+  # ========== Database (vm-databases-1, bare metal) ==========
+  DB_HOST: "192.168.100.15"
+  DB_PORT: "5432"
+  DB_NAME: "daitics"
+  DB_USER: "daitics_app"
+  # DB_PASSWORD comes from backend-db-secrets (ExternalSecret → Vault)
+
+  # ========== Keycloak — JWT Validation (Custom JwtDecoder) ==========
+  # ISSUER_URI = external URL (string comparison against JWT "iss" claim — NO HTTP call)
+  # JWK_SET_URI = internal URL (actual HTTP call to fetch signing keys)
+  # See: JwtDecoderConfig.java for the custom decoder that splits these two concerns
+  KEYCLOAK_ISSUER_URI: "https://keycloak.service.daitics.local/auth/realms/daitics-dev"
+  KEYCLOAK_JWK_SET_URI: "http://keycloak-keycloakx-http.keycloak:8080/auth/realms/daitics-dev/protocol/openid-connect/certs"
+
+  # ========== Keycloak — Admin API (User Sync, /auth prefix required) ==========
+  KEYCLOAK_SERVER_URL: "http://keycloak-keycloakx-http.keycloak:8080/auth"
+  KEYCLOAK_REALM: "daitics-dev"
+  KEYCLOAK_ADMIN_USERNAME: "admin"
+  # KEYCLOAK_ADMIN_PASSWORD comes from backend-keycloak-secrets (ExternalSecret → Vault)
+
+  # ========== OpenTelemetry — Disabled by default ==========
+  # Flip to "otlp" and set endpoint when Grafana/Prometheus collector is ready
+  OTEL_SERVICE_NAME: "dtx-schema-management"
+  OTEL_TRACES_EXPORTER: "none"
+  OTEL_METRICS_EXPORTER: "none"
+  OTEL_LOGS_EXPORTER: "none"
+  OTEL_EXPORTER_OTLP_ENDPOINT: ""
+  OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
+
+  # ========== Spring CORS (dtx-commons DtxSecurityProperties) ==========
+  # Default only allows localhost and sandbox IPs. Must add K8s portal origin.
+  DTX_SECURITY_CORS_ALLOWED_ORIGINS: "https://dev-dtx-portal.service.daitics.local,https://portal.service.daitics.local,http://localhost:[*]"
+
+  # ========== Swagger ==========
+  SWAGGER_SERVER_URL: "https://dev-dtx-schema-management.service.daitics.local"
+  SWAGGER_SERVER_DESCRIPTION: "Development server (K8s)"
