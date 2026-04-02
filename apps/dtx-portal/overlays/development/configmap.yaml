@@ -15,7 +15,7 @@ data:
       // Workers (192.168.100.x) cannot reach sandbox-dev (Tailscale 100.91.186.89)
       // See docs/09-NETWORK-CONSTRAINTS.md
       API_BASE_URL: "",
-      SCHEMA_REGISTRY_API_URL: "",
+      SCHEMA_REGISTRY_API_URL: "https://dev-dtx-schema-management.service.daitics.local",
       PIPELINE_API_URL: "",
       OPERATOR_API_URL: "https://dev-p5-operator-catalog.service.daitics.local",
       SYNTHETIC_DATA_API_URL: "",
