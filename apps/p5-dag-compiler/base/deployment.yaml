@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: p5-dag-compiler
+  labels:
+    app: p5-dag-compiler
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: p5-dag-compiler
+  template:
+    metadata:
+      labels:
+        app: p5-dag-compiler
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry-credentials
+      containers:
+        - name: p5-dag-compiler
+          image: gitlab-registry.service.daitics.local:30443/daitics-com/p5-dag-compiler:latest
+          ports:
+            - containerPort: 50002
+              name: http
+          envFrom:
+            - configMapRef:
+                name: p5-dag-compiler-config
+            - secretRef:
+                name: backend-db-secrets
+            - secretRef:
+                name: backend-keycloak-secrets
+            - secretRef:
+                name: minio-dag-compiler-secrets
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: "500m"
+            limits:
+              memory: "2048Mi"
+              cpu: "1000m"
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 50002
+            initialDelaySeconds: 90
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 50002
+            periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 50002
+            periodSeconds: 10
+            failureThreshold: 3

@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: p5-dag-compiler-config
+data:
+  # Server
+  SERVER_PORT: "50002"
+  SPRING_PROFILES_ACTIVE: "dev"
+
+  # Database (external PostgreSQL)
+  DB_HOST: "192.168.100.15"
+  DB_PORT: "5432"
+  DB_NAME: "daitics"
+  DB_USER: "daitics_app"
+  # DB_PASSWORD from ExternalSecret (backend-db-secrets)
+
+  # Keycloak — JWT Validation
+  KEYCLOAK_ISSUER_URI: "https://keycloak.service.daitics.local/auth/realms/daitics-dev"
+  KEYCLOAK_JWK_SET_URI: "http://keycloak-keycloakx-http.keycloak:8080/auth/realms/daitics-dev/protocol/openid-connect/certs"
+
+  # Keycloak — Admin API
+  KEYCLOAK_SERVER_URL: "http://keycloak-keycloakx-http.keycloak:8080/auth"
+  KEYCLOAK_REALM: "daitics-dev"
+  KEYCLOAK_ADMIN_USERNAME: "admin"
+  # KEYCLOAK_ADMIN_PASSWORD from ExternalSecret (backend-keycloak-secrets)
+
+  # Temporal
+  TEMPORAL_SERVER_URL: "temporal-frontend.temporal-system:7233"
+
+  # Flink
+  FLINK_JOBMANAGER_URL: "http://daitics-flink-session-rest.flink:8081"
+
+  # Compiler
+  COMPILER_OUTPUT_DIR: "/opt/flink-jobs"
+
+  # JAR Storage — MinIO
+  STORAGE_TYPE: "minio"
+  MINIO_ENDPOINT: "http://minio.minio-system:9000"
+  MINIO_BUCKET: "flink-jars"
+  MINIO_REGION: "us-east-1"
+  # MINIO_ACCESS_KEY and MINIO_SECRET_KEY from ExternalSecret (minio-dag-compiler-secrets)
+
+  # OpenTelemetry (disabled by default)
+  OTEL_SERVICE_NAME: "p5-dag-compiler"
+  OTEL_TRACES_EXPORTER: "none"
+  OTEL_METRICS_EXPORTER: "none"
+  OTEL_LOGS_EXPORTER: "none"
+
+  # Spring CORS
+  DTX_SECURITY_CORS_ALLOWED_ORIGINS: "https://dev-dtx-portal.service.daitics.local,https://portal.service.daitics.local,http://localhost:[*]"
+
+  # Swagger
+  SWAGGER_SERVER_URL: "https://dev-p5-dag-compiler.service.daitics.local"
+  SWAGGER_SERVER_DESCRIPTION: "Development server (K8s)"
