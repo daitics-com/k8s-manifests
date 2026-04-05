@@ -31,6 +31,12 @@ data:
   # Compiler
   COMPILER_OUTPUT_DIR: "/opt/flink-jobs"
 
+  # Maven runtime configuration for pipeline JAR compilation
+  # K8s cluster can't reach Maven Central via Tailscale DNS, so use offline mode.
+  # Docker image pre-warms ~/.m2/repository with Flink + Kafka + JDBC + plugins.
+  # Future: switch to GitLab Maven proxy by setting COMPILER_MAVEN_SETTINGS instead.
+  COMPILER_MAVEN_OFFLINE: "true"
+
   # JAR Storage — MinIO
   STORAGE_TYPE: "minio"
   MINIO_ENDPOINT: "http://minio.minio-system:9000"
